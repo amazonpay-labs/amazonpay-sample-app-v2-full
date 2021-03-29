@@ -100,40 +100,78 @@
     document.getElementById('hd8').addEventListener('change', saveSelectedValues);
     document.getElementById('hd10').addEventListener('change', saveSelectedValues);
 
+    //----------------------------------------
+    // 通常のAmazon Payボタン
+    //----------------------------------------
+    if(client === 'browser') {
+        amazon.Pay.renderButton('#AmazonPayButton', {
+            merchantId: '<%= merchantId %>',
+            ledgerCurrency: 'JPY', // Amazon Pay account ledger currency
+            sandbox: true, // dev environment
+            checkoutLanguage: 'ja_JP', // render language
+            productType: 'PayAndShip', // checkout type
+            placement: 'Cart', // button placement
+            buttonColor: 'Gold',
+            createCheckoutSessionConfig: {
+                payloadJSON: '<%- JSON.stringify(payload) %>', // string generated in step 2
+                signature: '<%= signature %>', // signature generated in step 3
+                publicKeyId: '<%= publicKeyId %>' 
+            }
+        });
+    } else {
+        let node = document.createElement("input");
+        node.type = "image";
+        node.src = "/static/img/button_images/Gold/Sandbox-live-ja_jp-amazonpay-gold-large-button_T2.png";
+        node.addEventListener('click', (e) => {
+            coverScreen();
+            if(client === 'androidApp') {
+                androidApp.login();
+            } else {
+                webkit.messageHandlers.iosApp.postMessage({op: 'login'});            
+            }
+        });
+        document.getElementById('AmazonPayButton').appendChild(node);
+    }
+
+
+    //------------------------------------------------------------------------------------------
+    // Web接客型Amazon Pay
+    // 参照: http://amazonpay-integration.amazon.co.jp/amazonpay-faq-v2/detail.html?id=QA-91
+    //------------------------------------------------------------------------------------------
+
     // 5秒後にポップアップを表示
     amazonpayAssist('AmazonPayAssistButton').fadeIn(5);
 
-    ['AmazonPayButton', 'AmazonPayAssistButton'].forEach(function(buttonId){
-        if(client === 'browser') {
-            amazon.Pay.renderButton('#' + buttonId, {
-                merchantId: '<%= merchantId %>',
-                ledgerCurrency: 'JPY', // Amazon Pay account ledger currency
-                sandbox: true, // dev environment
-                checkoutLanguage: 'ja_JP', // render language
-                productType: 'PayAndShip', // checkout type
-                placement: 'Cart', // button placement
-                buttonColor: 'Gold',
-                createCheckoutSessionConfig: {
-                    payloadJSON: '<%- JSON.stringify(payload) %>', // string generated in step 2
-                    signature: '<%= signature %>', // signature generated in step 3
-                    publicKeyId: '<%= publicKeyId %>' 
-                }
-            });
-        } else {
-            let node = document.createElement("input");
-            node.type = "image";
-            node.src = "/static/img/button_images/Gold/Sandbox-live-ja_jp-amazonpay-gold-medium-button_T2.png";
-            node.addEventListener('click', (e) => {
-                coverScreen();
-                if(client === 'androidApp') {
-                    androidApp.login();
-                } else {
-                    webkit.messageHandlers.iosApp.postMessage({op: 'login'});            
-                }
-            });
-            document.getElementById(buttonId).appendChild(node);
-        }
-    });
+    // ポップアップ上のAmazon Payボタン表示処理
+    if(client === 'browser') {
+        amazon.Pay.renderButton('#AmazonPayAssistButton', {
+            merchantId: '<%= merchantId %>',
+            ledgerCurrency: 'JPY', // Amazon Pay account ledger currency
+            sandbox: true, // dev environment
+            checkoutLanguage: 'ja_JP', // render language
+            productType: 'PayAndShip', // checkout type
+            placement: 'Cart', // button placement
+            buttonColor: 'Gold',
+            createCheckoutSessionConfig: {
+                payloadJSON: '<%- JSON.stringify(payload) %>', // string generated in step 2
+                signature: '<%= signature %>', // signature generated in step 3
+                publicKeyId: '<%= publicKeyId %>' 
+            }
+        });
+    } else {
+        let node = document.createElement("input");
+        node.type = "image";
+        node.src = "/static/img/button_images/Gold/Sandbox-live-ja_jp-amazonpay-gold-medium-button_T2.png";
+        node.addEventListener('click', (e) => {
+            coverScreen();
+            if(client === 'androidApp') {
+                androidApp.login();
+            } else {
+                webkit.messageHandlers.iosApp.postMessage({op: 'login'});            
+            }
+        });
+        document.getElementById('AmazonPayAssistButton').appendChild(node);
+    }
 
     function loadUrl(url) {
         location.href = url;

@@ -1,0 +1,3 @@
+# mov -> gif
+% ffmpeg -i amazonAssist.mov -r 24 amazonAssist.gif 
+
