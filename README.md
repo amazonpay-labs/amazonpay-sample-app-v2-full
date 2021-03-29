@@ -11,7 +11,7 @@
 情報入力の煩雑な手続により、ECサイト離脱寸前のお客様を救うソリューションである、[Web接客型Amazon Pay](http://amazonpay-integration.amazon.co.jp/amazonpay-faq-v2/detail.html?id=QA-91)のモバイルアプリでの実装です。  
 上記リンク先FAQのサンプルをほぼそのままWebView上で実装しています。  
 
-※ Nativeアプリの場合にはこのサンプル通りにご実装いただくことはできませんが、同様の動作をするPopUpをご自身でご実装頂くことは可能です。  
+※ Nativeアプリの場合にはこのサンプル通りにご実装いただくことはできませんが、同様の動作をするPopUpをご自身でご実装頂くことは可能です。  
 
 上記FAQの「amazonpayAssist.js」をダウンロードし、PopUpを表示させたいページで読み込んで下記のようなScriptを追加するだけでご実装いただけます。  
 
